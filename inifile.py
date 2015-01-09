@@ -438,6 +438,14 @@ class IniData(MutableMapping):
         values = itervalues
         items = iteritems
 
+    def section_as_dict(self, section):
+        rv = {}
+        prefix = section + '.'
+        for key, value in self.iteritems():
+            if key.startswith(prefix):
+                rv[key[len(prefix):]] = value
+        return rv
+
     def __getitem__(self, name):
         if name in self._changes:
             rv = self._changes[name]
