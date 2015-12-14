@@ -534,7 +534,7 @@ class IniFile(IniData):
             dir=os.path.dirname(self.filename), prefix='.__atomic-write')
         try:
             with os.fdopen(fd, 'wb') as f:
-                new_tokens = self.dialect.get_updated_lines(old_tokens)
+                new_tokens = self.get_updated_lines(old_tokens)
                 for _, line, _ in new_tokens:
                     f.write((line + linesep).encode(enc))
         except:
