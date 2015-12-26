@@ -13,8 +13,13 @@ WIN = sys.platform.startswith('win')
 
 if PY2:
     iteritems = lambda x: x.iteritems()
+    exec('def reraise(tp, value, tb=None):\n raise tp, value, tb')
 else:
     iteritems = lambda x: iter(x.items())
+    def reraise(tp, value, tb=None):
+        if value.__traceback__ is not tb:
+            raise value.with_traceback(tb)
+        raise value
 
 
 def _posixify(name):
@@ -543,7 +548,7 @@ class IniFile(IniData):
                 os.remove(tmp_filename)
             except OSError:
                 pass
-            raise exc_info[0], exc_info[1], exc_info[2]
+            reraise(*exc_info)
 
         os.rename(tmp_filename, self.filename)
         self.rollover()
