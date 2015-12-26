@@ -543,7 +543,11 @@ class IniFile(IniData):
                 os.remove(tmp_filename)
             except OSError:
                 pass
-            raise exc_info[0], exc_info[1], exc_info[2]
+            
+            if PY2:
+                eval("raise exc_info[0], exc_info[1], exc_info[2]; 1", None, { 'exc_info': exc_info })
+            else:
+                raise exc_info[0].with_traceback(exc_info[1], exc_info[2])
 
         os.rename(tmp_filename, self.filename)
         self.rollover()
