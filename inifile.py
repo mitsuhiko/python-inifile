@@ -550,7 +550,17 @@ class IniFile(IniData):
                 pass
             reraise(*exc_info)
 
-        os.rename(tmp_filename, self.filename)
+        if hasattr(os, 'replace'):
+            os.replace(tmp_filename, self.filename)
+        else:
+            try:
+                os.rename(tmp_filename, self.filename)
+            except OSError:
+                if os.name == 'nt':
+                    os.remove(self.filename)
+                    os.rename(tmp_filename, self.filename)
+                else:
+                    raise
         self.rollover()
         self.is_new = False
 
