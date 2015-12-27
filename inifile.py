@@ -550,7 +550,7 @@ class IniFile(IniData):
                 pass
             reraise(*exc_info)
 
-        if 'replace' in dir(os):
+        if hasattr(os, 'replace'):
             os.replace(tmp_filename, self.filename)
         else:
             try:
