@@ -3,6 +3,7 @@ import sys
 import uuid
 import errno
 import tempfile
+import shutil
 
 from collections import MutableMapping, OrderedDict
 
@@ -550,7 +551,7 @@ class IniFile(IniData):
                 pass
             reraise(*exc_info)
 
-        os.rename(tmp_filename, self.filename)
+        shutil.move(tmp_filename, self.filename)
         self.rollover()
         self.is_new = False
 
