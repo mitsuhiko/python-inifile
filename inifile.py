@@ -12,9 +12,15 @@ WIN = sys.platform.startswith('win')
 
 
 if PY2:
+    text_type = unicode
+    string_types = (str, unicode)
+    integer_types = (int, long)
     iteritems = lambda x: x.iteritems()
     exec('def reraise(tp, value, tb=None):\n raise tp, value, tb')
 else:
+    text_type = str
+    string_types = (str,)
+    integer_types = (int,)
     iteritems = lambda x: iter(x.items())
     def reraise(tp, value, tb=None):
         if value.__traceback__ is not tb:
@@ -169,11 +175,11 @@ class Dialect(object):
             return self.true[0]
         if value is False:
             return self.false[0]
-        if isinstance(value, (int, long, float)):
-            return str(value)
-        if not isinstance(value, basestring):
+        if isinstance(value, integer_types) or isinstance(value, float):
+            return text_type(value)
+        if not isinstance(value, string_types):
             raise TypeError('Cannot set value of this type')
-        return unicode(value)
+        return text_type(value)
 
     def dict_from_iterable(self, iterable):
         """Builds a mapping of values out of an iterable of lines."""
