@@ -3,8 +3,11 @@ import sys
 import uuid
 import errno
 import tempfile
-
-from collections import MutableMapping, OrderedDict
+from collections import OrderedDict
+try:
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import MutableMapping
 
 
 PY2 = sys.version_info[0] == 2
