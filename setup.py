@@ -6,6 +6,6 @@ setup(
     author='Armin Ronacher',
     author_email='armin.ronacher@active-4.com',
     description='A small INI library for Python.',
-    version='0.4',
+    version='0.4.1',
     py_modules=['inifile'],
 )
