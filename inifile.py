@@ -331,8 +331,11 @@ class IniData(MutableMapping):
     def __len__(self):
         rv = len(self._primary)
         for key, value in iteritems(self._changes):
-            if key in self._primary and value is not None:
-                rv += 1
+            if key in self._primary:
+                if value is None:
+                    rv -= 1  # key was deleted
+            elif value is not None:
+                rv += 1  # key was added
         return rv
 
     def get(self, name, default=None):
